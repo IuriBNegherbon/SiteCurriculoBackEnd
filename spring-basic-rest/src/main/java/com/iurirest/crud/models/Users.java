@@ -1,4 +1,4 @@
-package com.iurirest.crud;
+package com.iurirest.crud.models;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -31,9 +31,10 @@ public class Users {
     public Users() {
     }
 
-    public Users(String name, String email) {
+    public Users(String name, String email, String password) {
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
     public void setName(String name) {

@@ -1,4 +1,4 @@
-package com.iurirest.crud;
+package com.iurirest.crud.dto;
 
 /*public class UserResponseDTO {
     private String message;

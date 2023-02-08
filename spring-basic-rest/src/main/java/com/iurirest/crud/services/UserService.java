@@ -1,5 +1,8 @@
-package com.iurirest.crud;
+package com.iurirest.crud.services;
 
+import com.iurirest.crud.dto.UserRequestDTO;
+import com.iurirest.crud.models.Users;
+import com.iurirest.crud.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,4 +21,5 @@ public class UserService {
     public List<Users> getAllUsers() {
         return userRepository.findAll();
     }
+
 }

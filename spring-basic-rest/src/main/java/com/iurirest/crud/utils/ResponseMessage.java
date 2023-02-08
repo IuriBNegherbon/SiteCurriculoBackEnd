@@ -1,4 +1,4 @@
-package com.iurirest.crud;
+package com.iurirest.crud.utils;
 
 public class ResponseMessage {
     private String message;

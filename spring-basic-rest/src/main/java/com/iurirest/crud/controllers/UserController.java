@@ -1,5 +1,11 @@
-package com.iurirest.crud;
+package com.iurirest.crud.controllers;
 
+import com.iurirest.crud.dto.UserRequestDTO;
+import com.iurirest.crud.dto.UserResponseDTO;
+import com.iurirest.crud.models.Users;
+import com.iurirest.crud.repositories.UserRepository;
+import com.iurirest.crud.services.UserService;
+import com.iurirest.crud.utils.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,24 +27,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    /*@PostMapping("/users")
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody Users users) {
-        Users createdUser = userRepository.save(users);
-        UserResponseDTO createdUserDTO = new UserResponseDTO();
-        createdUserDTO.setId(createdUser.getId());
-        createdUserDTO.setName(createdUser.getName());
-        createdUserDTO.setEmail(createdUser.getEmail());
-        //createdUserDTO.setPassword(createdUser.getPassword());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUserDTO);
-    }*/
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        Users user = new Users(userRequestDTO.getName(), userRequestDTO.getEmail());
-        user = userRepository.save(user);
-        UserResponseDTO userResponseDTO = new UserResponseDTO(user.getId(), user.getName(), user.getEmail());
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
-    }
-
     @GetMapping("/users/{id}")
     public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id) {
         Optional<Users> optionalUsers = userRepository.findById(id);
@@ -57,19 +45,27 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    /*@GetMapping
-    public ResponseEntity<List<Users>> getAll() {
-        UserService userService = new UserService();
-        List<Users> users = userService.getAllUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }*/
-
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAll() {
         List<Users> users = userService.getAllUsers();
         List<UserResponseDTO> userResponseDTOS = users.stream().map(user -> new UserResponseDTO(user.getId(), user.getName(), user.getEmail())).collect(Collectors.toList());
         return new ResponseEntity<>(userResponseDTOS, HttpStatus.OK);
     }
+
+    @PostMapping
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        Users user = new Users(userRequestDTO.getName(), userRequestDTO.getEmail(), userRequestDTO.getpassword());
+        user = userRepository.save(user);
+        UserResponseDTO userResponseDTO = new UserResponseDTO(user.getId(), user.getName(), user.getEmail());
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
+    }
+
+    /*@PutMapping("/{id}")
+    public ResponseEntity<ResponseMessage> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO userRequestDTO) {
+        UserService userService = new UserService();
+        ResponseMessage responseMessage = userService.updateUser(id, userRequestDTO);
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
+    }*/
 
     @PutMapping("/users/{id}")
     public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody Users users) {
@@ -78,7 +74,6 @@ public class UserController {
             UserResponseDTO dto = new UserResponseDTO();
             dto.setMessage("Usuário não encontrado");
             return ResponseEntity.ok(dto);
-            //return ResponseEntity.badRequest().body(new ResponseMessage("Usuário não encontrado"));
         }
 
         Users updatedUser = user.get();

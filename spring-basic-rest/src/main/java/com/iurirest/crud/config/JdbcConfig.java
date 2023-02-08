@@ -1,4 +1,4 @@
-package com.iurirest.crud;
+package com.iurirest.crud.config;
 
 import javax.sql.DataSource;
 
