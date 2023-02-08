@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +21,7 @@ public class UserController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping("/users")
+    /*@PostMapping("/users")
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody Users users) {
         Users createdUser = userRepository.save(users);
         UserResponseDTO createdUserDTO = new UserResponseDTO();
@@ -29,6 +30,13 @@ public class UserController {
         createdUserDTO.setEmail(createdUser.getEmail());
         //createdUserDTO.setPassword(createdUser.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUserDTO);
+    }*/
+    @PostMapping
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        Users user = new Users(userRequestDTO.getName(), userRequestDTO.getEmail());
+        user = userRepository.save(user);
+        UserResponseDTO userResponseDTO = new UserResponseDTO(user.getId(), user.getName(), user.getEmail());
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/users/{id}")

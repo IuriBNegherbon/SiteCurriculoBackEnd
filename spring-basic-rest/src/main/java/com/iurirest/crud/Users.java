@@ -27,6 +27,15 @@ public class Users {
     @JsonProperty("password")
     private String password;
 
+
+    public Users() {
+    }
+
+    public Users(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
