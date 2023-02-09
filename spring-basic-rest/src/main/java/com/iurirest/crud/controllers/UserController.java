@@ -1,7 +1,6 @@
 package com.iurirest.crud.controllers;
 
-import com.iurirest.crud.dto.UserRequestDTO;
-import com.iurirest.crud.dto.UserResponseDTO;
+import com.iurirest.crud.dto.UsersDTO;
 import com.iurirest.crud.models.Users;
 import com.iurirest.crud.repositories.UserRepository;
 import com.iurirest.crud.services.UserService;
@@ -28,50 +27,38 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id) {
+    public ResponseEntity<UsersDTO> getUser(@PathVariable Long id) {
         Optional<Users> optionalUsers = userRepository.findById(id);
         if (!optionalUsers.isPresent()) {
-            UserResponseDTO dto = new UserResponseDTO();
+            UsersDTO dto = new UsersDTO();
             dto.setMessage("Usuário não encontrado");
             return ResponseEntity.ok(dto);
         }
         Users user = optionalUsers.get();
 
-        UserResponseDTO response = new UserResponseDTO();
-        response.setId(user.getId());
-        response.setName(user.getName());
-        response.setEmail(user.getEmail());
-        //response.setPassword(user.getPassword());
+        UsersDTO response = new UsersDTO(user.getId(), user.getName(), user.getEmail(), user.getCpf());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAll() {
+    public ResponseEntity<List<UsersDTO>> getAll() {
         List<Users> users = userService.getAllUsers();
-        List<UserResponseDTO> userResponseDTOS = users.stream().map(user -> new UserResponseDTO(user.getId(), user.getName(), user.getEmail())).collect(Collectors.toList());
-        return new ResponseEntity<>(userResponseDTOS, HttpStatus.OK);
+        List<UsersDTO> usersDTO = users.stream().map(user -> new UsersDTO(user.getId(), user.getName(), user.getEmail(), user.getCpf())).collect(Collectors.toList());
+        return new ResponseEntity<>(usersDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        Users user = new Users(userRequestDTO.getName(), userRequestDTO.getEmail(), userRequestDTO.getpassword());
-        user = userRepository.save(user);
-        UserResponseDTO userResponseDTO = new UserResponseDTO(user.getId(), user.getName(), user.getEmail());
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
+    public ResponseEntity<UsersDTO> createUser(@Valid @RequestBody Users users) {
+        users = userRepository.save(users);
+        UsersDTO UsersDTO = new UsersDTO(users.getId(), users.getName(), users.getEmail(), users.getCpf(), "Usuário criado com sucesso");
+        return new ResponseEntity<>(UsersDTO, HttpStatus.CREATED);
     }
 
-    /*@PutMapping("/{id}")
-    public ResponseEntity<ResponseMessage> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequestDTO userRequestDTO) {
-        UserService userService = new UserService();
-        ResponseMessage responseMessage = userService.updateUser(id, userRequestDTO);
-        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
-    }*/
-
     @PutMapping("/users/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody Users users) {
+    public ResponseEntity<UsersDTO> updateUser(@PathVariable Long id, @Valid @RequestBody Users users) {
         Optional<Users> user = userRepository.findById(id);
         if (!user.isPresent()) {
-            UserResponseDTO dto = new UserResponseDTO();
+            UsersDTO dto = new UsersDTO();
             dto.setMessage("Usuário não encontrado");
             return ResponseEntity.ok(dto);
         }
@@ -80,14 +67,11 @@ public class UserController {
         updatedUser.setName(users.getName());
         updatedUser.setEmail(users.getEmail());
         updatedUser.setPassword(users.getPassword());
+        updatedUser.setCpf(users.getCpf());
         userRepository.save(updatedUser);
 
-        UserResponseDTO dto = new UserResponseDTO();
-        dto.setId(updatedUser.getId());
-        dto.setName(updatedUser.getName());
-        dto.setEmail(updatedUser.getEmail());
-        //dto.setPassword(updatedUser.getPassword());
-        return ResponseEntity.ok(dto);
+        UsersDTO UsersDTO = new UsersDTO(updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail(), updatedUser.getCpf(), "Usuário alterado com sucesso");
+        return ResponseEntity.ok(UsersDTO);
     }
 
     @DeleteMapping("/users/{id}")

@@ -1,6 +1,5 @@
 package com.iurirest.crud.services;
 
-import com.iurirest.crud.dto.UserRequestDTO;
 import com.iurirest.crud.models.Users;
 import com.iurirest.crud.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
