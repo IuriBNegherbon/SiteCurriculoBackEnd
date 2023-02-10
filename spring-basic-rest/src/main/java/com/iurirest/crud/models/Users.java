@@ -2,8 +2,8 @@ package com.iurirest.crud.models;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
-//import com.iurirest.crud.utils.CPF;
-import org.hibernate.validator.constraints.br.CPF;
+import com.iurirest.crud.utils.CPF;
+//import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
