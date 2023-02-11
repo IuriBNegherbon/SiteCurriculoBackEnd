@@ -1,6 +1,8 @@
 package com.iurirest.crud.controllers;
 
 import com.iurirest.crud.dto.UsersDTO;
+import com.iurirest.crud.exceptions.UserAlreadyExistsException;
+import com.iurirest.crud.exceptions.UserNotFoundException;
 import com.iurirest.crud.models.Users;
 import com.iurirest.crud.repositories.UserRepository;
 import com.iurirest.crud.services.UserService;
@@ -47,31 +49,41 @@ public class UserController {
         return new ResponseEntity<>(usersDTO, HttpStatus.OK);
     }
 
-    @PostMapping
+    /*@PostMapping
     public ResponseEntity<UsersDTO> createUser(@Valid @RequestBody Users users) {
+        UsersDTO createdUserDTO = userService.createUser(users);
+
         users = userRepository.save(users);
         UsersDTO UsersDTO = new UsersDTO(users.getId(), users.getName(), users.getEmail(), users.getCpf(), "Usuário criado com sucesso");
         return new ResponseEntity<>(UsersDTO, HttpStatus.CREATED);
+    }*/
+
+    @PostMapping("/users")
+    public ResponseEntity<UsersDTO> createUser(@Valid @RequestBody Users users) {
+        try {
+            UsersDTO createdUserDTO = userService.createUser(users);
+            return ResponseEntity.ok(createdUserDTO);
+        } catch (UserAlreadyExistsException e) {
+            UsersDTO dto = new UsersDTO();
+            dto.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(dto);
+        }
     }
 
     @PutMapping("/users/{id}")
     public ResponseEntity<UsersDTO> updateUser(@PathVariable Long id, @Valid @RequestBody Users users) {
-        Optional<Users> user = userRepository.findById(id);
-        if (!user.isPresent()) {
+        try {
+            UsersDTO updatedUserDTO = userService.updateUser(id, users);
+            return ResponseEntity.ok(updatedUserDTO);
+        } catch (UserAlreadyExistsException e) {
             UsersDTO dto = new UsersDTO();
-            dto.setMessage("Usuário não encontrado");
-            return ResponseEntity.ok(dto);
+            dto.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(dto);
+        } catch (UserNotFoundException e) {
+            UsersDTO dto = new UsersDTO();
+            dto.setMessage(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
-
-        Users updatedUser = user.get();
-        updatedUser.setName(users.getName());
-        updatedUser.setEmail(users.getEmail());
-        updatedUser.setPassword(users.getPassword());
-        updatedUser.setCpf(users.getCpf());
-        userRepository.save(updatedUser);
-
-        UsersDTO UsersDTO = new UsersDTO(updatedUser.getId(), updatedUser.getName(), updatedUser.getEmail(), updatedUser.getCpf(), "Usuário alterado com sucesso");
-        return ResponseEntity.ok(UsersDTO);
     }
 
     @DeleteMapping("/users/{id}")

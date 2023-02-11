@@ -55,7 +55,7 @@ public class UsersDTO {
         this.email = email;
     }
 
-    public String getcpf() {
+    public String getCpf() {
         return cpf;
     }
 
