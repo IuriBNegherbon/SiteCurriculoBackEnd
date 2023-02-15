@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-//@RequestMapping("/users")
+//@RequestMapping("/siteCurriculo")
 public class UserController {
     private final UserRepository userRepository;
     @Autowired
@@ -42,21 +42,12 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+    @GetMapping//("/users")
     public ResponseEntity<List<UsersDTO>> getAll() {
         List<Users> users = userService.getAllUsers();
         List<UsersDTO> usersDTO = users.stream().map(user -> new UsersDTO(user.getId(), user.getName(), user.getEmail(), user.getCpf())).collect(Collectors.toList());
         return new ResponseEntity<>(usersDTO, HttpStatus.OK);
     }
-
-    /*@PostMapping
-    public ResponseEntity<UsersDTO> createUser(@Valid @RequestBody Users users) {
-        UsersDTO createdUserDTO = userService.createUser(users);
-
-        users = userRepository.save(users);
-        UsersDTO UsersDTO = new UsersDTO(users.getId(), users.getName(), users.getEmail(), users.getCpf(), "Usuário criado com sucesso");
-        return new ResponseEntity<>(UsersDTO, HttpStatus.CREATED);
-    }*/
 
     @PostMapping("/users")
     public ResponseEntity<UsersDTO> createUser(@Valid @RequestBody Users users) {
