@@ -1,10 +1,10 @@
-package com.iurirest.crud.services;
+package com.iurirest.crudUser.services;
 
-import com.iurirest.crud.dto.UsersDTO;
-import com.iurirest.crud.exceptions.UserAlreadyExistsException;
-import com.iurirest.crud.exceptions.UserNotFoundException;
-import com.iurirest.crud.models.Users;
-import com.iurirest.crud.repositories.UserRepository;
+import com.iurirest.crudUser.dto.UsersDTO;
+import com.iurirest.crudUser.exceptions.UserAlreadyExistsException;
+import com.iurirest.crudUser.exceptions.UserNotFoundException;
+import com.iurirest.crudUser.models.Users;
+import com.iurirest.crudUser.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

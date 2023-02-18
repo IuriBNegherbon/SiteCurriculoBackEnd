@@ -1,6 +1,6 @@
-package com.iurirest.crud.repositories;
+package com.iurirest.crudUser.repositories;
 
-import com.iurirest.crud.models.Users;
+import com.iurirest.crudUser.models.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

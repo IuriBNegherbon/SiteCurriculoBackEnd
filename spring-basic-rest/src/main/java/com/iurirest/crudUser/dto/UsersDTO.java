@@ -1,8 +1,4 @@
-package com.iurirest.crud.dto;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+package com.iurirest.crudUser.dto;
 
 public class UsersDTO {
     private Long id;

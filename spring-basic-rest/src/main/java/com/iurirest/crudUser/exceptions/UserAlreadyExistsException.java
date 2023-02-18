@@ -1,4 +1,4 @@
-package com.iurirest.crud.exceptions;
+package com.iurirest.crudUser.exceptions;
 
 public class UserAlreadyExistsException extends RuntimeException {
 

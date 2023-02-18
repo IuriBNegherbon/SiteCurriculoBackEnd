@@ -1,12 +1,12 @@
-package com.iurirest.crud.controllers;
+package com.iurirest.crudUser.controllers;
 
-import com.iurirest.crud.dto.UsersDTO;
-import com.iurirest.crud.exceptions.UserAlreadyExistsException;
-import com.iurirest.crud.exceptions.UserNotFoundException;
-import com.iurirest.crud.models.Users;
-import com.iurirest.crud.repositories.UserRepository;
-import com.iurirest.crud.services.UserService;
-import com.iurirest.crud.utils.ResponseMessage;
+import com.iurirest.crudUser.dto.UsersDTO;
+import com.iurirest.crudUser.exceptions.UserAlreadyExistsException;
+import com.iurirest.crudUser.exceptions.UserNotFoundException;
+import com.iurirest.crudUser.models.Users;
+import com.iurirest.crudUser.repositories.UserRepository;
+import com.iurirest.crudUser.services.UserService;
+import com.iurirest.crudUser.utils.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

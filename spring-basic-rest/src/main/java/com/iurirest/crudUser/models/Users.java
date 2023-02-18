@@ -1,8 +1,8 @@
-package com.iurirest.crud.models;
+package com.iurirest.crudUser.models;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.iurirest.crud.utils.CPF;
+import com.iurirest.crudUser.utils.CPF;
 //import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.Entity;
@@ -13,8 +13,6 @@ import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
-import java.util.Scanner;
 
 @Entity
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

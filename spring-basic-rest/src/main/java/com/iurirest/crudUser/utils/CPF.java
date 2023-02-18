@@ -1,4 +1,4 @@
-package com.iurirest.crud.utils;
+package com.iurirest.crudUser.utils;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
