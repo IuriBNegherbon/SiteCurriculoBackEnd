@@ -7,6 +7,7 @@ import com.iurirest.ControleMensal.repositories.FluxoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public class FluxoService {
 
     public List<Fluxo> getAllFluxo() {return fluxoRepository.findAll();}
     public List<Fluxo> getOperacaoFluxo(String operacao) {return fluxoRepository.findByOperacao(operacao);}
+    public List<Fluxo> getAgrupador2Fluxo(String agrupador2) {return fluxoRepository.findByAgrupador2(agrupador2);}
 
     public FluxoDTO updateFluxo(Long id, Fluxo fluxo) {
 
@@ -45,13 +47,13 @@ public class FluxoService {
                 , createdFluxo.getAgrupador2(), createdFluxo.getData(), createdFluxo.getValor(), "Registro inserido com sucesso");
     }
 
-    private float getSumByPeriodAndType(LocalDate startDate, LocalDate endDate, String tipo) {
-        return fluxoRepository.sumByPeriodAndType(startDate, endDate, tipo);
+    private BigDecimal getSumByPeriodAndType(LocalDate startDate, LocalDate endDate, String tipo) {
+        return Optional.ofNullable(fluxoRepository.sumByPeriodAndType(startDate, endDate, tipo)).orElse(BigDecimal.ZERO);
     }
 
     public FluxoTotalDTO getFluxoSummary(LocalDate startDate, LocalDate endDate) {
-        float totalEntrada = getSumByPeriodAndType(startDate, endDate, "entrada");
-        float totalSaida = getSumByPeriodAndType(startDate, endDate, "saida");
+        BigDecimal totalEntrada = getSumByPeriodAndType(startDate, endDate, "entrada");
+        BigDecimal totalSaida = getSumByPeriodAndType(startDate, endDate, "saida");
         return new FluxoTotalDTO(totalEntrada, totalSaida);
     }
 }

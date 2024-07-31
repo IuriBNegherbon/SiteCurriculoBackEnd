@@ -29,11 +29,11 @@ public class Fluxo {
     private String descricao;
     @Column
     @JsonProperty("agrupador1")
-    @Size(min = 4, max = 50)
+    @Size(min = 2, max = 50)
     private String agrupador1;
     @Column
     @JsonProperty("agrupador2")
-    @Size(min = 4, max = 50)
+    @Size(min = 2, max = 50)
     private String agrupador2;
     @Column
     @JsonProperty("data")

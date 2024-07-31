@@ -29,11 +29,15 @@ public class FluxoController {
     public FluxoController(FluxoRepository fluxoRepository) { this.fluxoRepository = fluxoRepository; }
 
     @GetMapping
-    public ResponseEntity<List<FluxoDTO>> getFluxo(@RequestParam(required = false) String operacao) {
+    public ResponseEntity<List<FluxoDTO>> getFluxo(@RequestParam(required = false) String operacao, String agrupador2) {
         List<Fluxo> fluxo;
 
         if (operacao != null && !operacao.isEmpty()) {
             fluxo = fluxoService.getOperacaoFluxo(operacao);
+
+        } else if (agrupador2 != null && !agrupador2.isEmpty()) {
+            fluxo = fluxoService.getAgrupador2Fluxo(agrupador2);
+
         } else {
             fluxo = fluxoService.getAllFluxo();
         }
