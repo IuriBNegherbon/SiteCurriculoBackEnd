@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/fluxo")
+@CrossOrigin(origins = "http://localhost:4200")
 public class FluxoController {
     private final FluxoRepository fluxoRepository;
     @Autowired
