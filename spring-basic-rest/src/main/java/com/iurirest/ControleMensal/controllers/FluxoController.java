@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,26 +31,47 @@ public class FluxoController {
     public FluxoController(FluxoRepository fluxoRepository) { this.fluxoRepository = fluxoRepository; }
 
     @GetMapping
-    public ResponseEntity<List<FluxoDTO>> getFluxo(@RequestParam(required = false) String operacao, String agrupador2) {
+    public ResponseEntity<List<FluxoDTO>> getFluxo(
+            @RequestParam(required = false) String operacao,
+            @RequestParam(required = false) String agrupador2,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
+
         List<Fluxo> fluxo;
 
+        // Converter as strings de data para LocalDate, se fornecidas
+        LocalDate start = null;
+        LocalDate end = null;
+        if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            try {
+                start = LocalDate.parse(startDate, formatter);
+                end = LocalDate.parse(endDate, formatter);
+            } catch (DateTimeParseException e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        // Filtragem com base nos parâmetros fornecidos
         if (operacao != null && !operacao.isEmpty()) {
             fluxo = fluxoService.getOperacaoFluxo(operacao);
-
         } else if (agrupador2 != null && !agrupador2.isEmpty()) {
             fluxo = fluxoService.getAgrupador2Fluxo(agrupador2);
-
+        } else if (start != null && end != null) {
+            fluxo = fluxoService.getAllByData(start, end);
         } else {
             fluxo = fluxoService.getAllFluxo();
         }
 
+        // Transformar a lista de Fluxo em FluxoDTO
         List<FluxoDTO> fluxoDTO = fluxo.stream()
-                                    .map(fluxo1 -> new FluxoDTO(fluxo1.getId(), fluxo1.getOperacao(), fluxo1.getDescricao(), fluxo1.getAgrupador1(),
-                                                                fluxo1.getAgrupador2(), fluxo1.getData(), fluxo1.getValor()))
-                                    .collect(Collectors.toList());
+                .map(fluxo1 -> new FluxoDTO(fluxo1.getId(), fluxo1.getOperacao(), fluxo1.getDescricao(), fluxo1.getAgrupador1(),
+                        fluxo1.getAgrupador2(), fluxo1.getData(), fluxo1.getValor()))
+                .collect(Collectors.toList());
 
         return new ResponseEntity<>(fluxoDTO, HttpStatus.OK);
     }
+
 
     @GetMapping("/total")
     public ResponseEntity<FluxoTotalDTO> getFluxoTotal(@RequestParam String startDate, @RequestParam String endDate) {

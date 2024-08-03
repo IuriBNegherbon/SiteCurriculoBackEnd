@@ -14,6 +14,8 @@ import java.util.List;
 public interface FluxoRepository extends JpaRepository<Fluxo, Long> {
     List<Fluxo> findByOperacao(String operacao);
     List<Fluxo> findByAgrupador2(String agrupador2);
+    List<Fluxo> findByDataBetween(LocalDate startDate, LocalDate endDate);
+
 
     @Query("SELECT SUM(f.valor) FROM Fluxo f WHERE f.data BETWEEN :startDate AND :endDate AND f.operacao = :tipo")
     BigDecimal sumByPeriodAndType(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("tipo") String tipo);

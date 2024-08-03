@@ -56,4 +56,8 @@ public class FluxoService {
         BigDecimal totalSaida = getSumByPeriodAndType(startDate, endDate, "saida");
         return new FluxoTotalDTO(totalEntrada, totalSaida);
     }
+
+    public List<Fluxo> getAllByData(LocalDate startDate, LocalDate endDate) {
+        return fluxoRepository.findByDataBetween(startDate, endDate);
+    }
 }
